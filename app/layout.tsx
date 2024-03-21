@@ -1,24 +1,17 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
+import "./globals.css";
 
-export const metadata = { 
-  title: 'Forum',
-}
-
-const inter = Inter({
-  variable: '--font-inter',
-  subsets: ['latin'],
-  display: 'swap',
-})
+export const metadata = {
+  title: "Forum",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.variable}>{children}</body>
+      <body>{children}</body>
     </html>
-  )
+  );
 }
