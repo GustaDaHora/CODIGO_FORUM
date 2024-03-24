@@ -8,6 +8,7 @@
     max-height: 60px;
     min-height: 60px;
     border-radius: 1px;
+    
 }
 
 
@@ -18,16 +19,19 @@
 }
 
 .logo1>h2{
-    color: brown;
+    color: #61be68;
     font-size: 15px;
     rotate: -8deg;
+    letter-spacing: 1px;
+    line-height: 1.5;
 }
 .logo1>h1{
-    color: blueviolet;
+    color: #358b3b;
     position: relative;
     top: -20px;
     font-size: 22px;
     left: 4px;
+    rotate: -2deg;
 }
 .botoes{
     position: absolute;
@@ -51,7 +55,7 @@
 }
 
 .login{
-    background-color: rgba(0, 0, 255, 0); /* Azul com 50% de opacidade */
+    background-color: rgba(0, 0, 255, 0); 
     color: white;
     padding: 10px 20px;
     border: none;
