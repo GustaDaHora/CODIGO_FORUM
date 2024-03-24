@@ -1,20 +1,26 @@
 .logo {
-    position: relative;
-    left: 200px;
+    cursor: pointer;
+    display: block;
+    height: 75px;
 }
 
+
 .logo1{
-    color: #61be68;
+    color: var(--cor-principal);
     font-size: 15px;
-    rotate: -8deg;
+    rotate: -10deg;
     letter-spacing: 1px;
-    line-height: 1.5;
+    font-size: var(--tamanho-medio);
+    margin-top: 12px;
 }
 
 .logo2 {
-    color: #358b3b;
-    position: relative;
-    top: -20px;
-    font-size: 22px;
-    left: 4px;
+    color: var(--cor-links);
+    font-size: var(--tamanho-h3);
+    transform: translate(10px, -15px);
+}
+
+:is(.logo1, .logo2):hover {
+    color: var(--cor-hover);
+    transition: .5s ease;
 }

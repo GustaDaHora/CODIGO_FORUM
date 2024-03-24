@@ -1,16 +1,29 @@
 import Logo from "@/components/logo";
 import "./index.css";
-import { CiLogin } from "react-icons/ci";
+import { FiLogIn } from "react-icons/fi";
 
 export default function Header() {
   return (
     <header className="header">
-      <Logo />
-      <nav className="botoes">
-        <button className="botaoCadastrar">Cadastrar</button>
-        <button className="botaoLogin"><CiLogin className="iconeLogin" />Login</button>
-      </nav>
-      
+      <div className="conteudoHeader">
+        <Logo />
+        <nav className="botoesHeader">
+          <a href="/">
+            <button className="botaoHeader">Recentes</button>
+          </a>
+          <a href="/">
+            <button className="botaoHeader">Relevantes</button>
+          </a>
+          <a href="/">
+            <button className="botaoHeader">Sem Resposta</button>
+          </a>
+          <button className="botaoCadastrar">CADASTRAR</button>
+          <button className="botaoHeader">
+            <FiLogIn className="iconeLogin" />
+            Login
+          </button>
+        </nav>
+      </div>
     </header>
   );
 }
