@@ -1,0 +1,20 @@
+.logo {
+    position: relative;
+    left: 200px;
+}
+
+.logo1{
+    color: #61be68;
+    font-size: 15px;
+    rotate: -8deg;
+    letter-spacing: 1px;
+    line-height: 1.5;
+}
+
+.logo2 {
+    color: #358b3b;
+    position: relative;
+    top: -20px;
+    font-size: 22px;
+    left: 4px;
+}
