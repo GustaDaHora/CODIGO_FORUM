@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Logo from "@/components/logo";
 import "./index.css";
 import { FiLogIn } from "react-icons/fi";
@@ -17,11 +18,15 @@ export default function Header() {
           <a href="/">
             <button className="botaoHeader">Sem Resposta</button>
           </a>
-          <button className="botaoCadastrar">CADASTRAR</button>
-          <button className="botaoHeader">
-            <FiLogIn className="iconeLogin" />
-            Login
-          </button>
+          <Link href="/signup">
+            <button className="botaoCadastrar">CADASTRAR</button>
+          </Link>
+          <Link href="/login">
+            <button className="botaoHeader">
+              <FiLogIn className="iconeLogin" />
+              Login
+            </button>
+          </Link>
         </nav>
       </div>
     </header>
