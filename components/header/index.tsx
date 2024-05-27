@@ -18,15 +18,14 @@ export default function Header() {
           <a href="/">
             <button className="botaoHeader">Sem Resposta</button>
           </a>
-          <Link href="/signup">
-            <button className="botaoCadastrar">CADASTRAR</button>
+          <Link href="/auth/register" passHref>
+            CADASTRA
           </Link>
-          <Link href="/login">
-            <button className="botaoHeader">
-              <FiLogIn className="iconeLogin" />
-              Login
-            </button>
+          <Link href="/auth/signin" passHref>
+            <FiLogIn className="iconeLogin" />
+            Login
           </Link>
+          <Link href="/profile">Meu Perfil</Link>
         </nav>
       </div>
     </header>
