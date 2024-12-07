@@ -9,12 +9,12 @@ export default function Footer() {
         <button className="footerLink">Sobre</button>
         <button className="footerLink">Política de Privacidade</button>
         <button className="footerLink">Termos de Uso</button>
-
       </div>
       <div className="footerDescricao">
-        <p className="direitos">Papo Olympus 2024 &copy; Todos direitos reservados</p>
+        <p className="direitos">
+          Papo Olympus 2024 &copy; Todos direitos reservados
+        </p>
       </div>
-      
     </footer>
   );
 }
