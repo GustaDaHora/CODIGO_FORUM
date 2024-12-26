@@ -1,7 +1,53 @@
+/* fonte import */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+
+
+/* estilos gerais */
 html,
 body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100vh;
+    color: #ffffff;
+    background-color: #090B0F;
+    font-family: "Lato", sans-serif;
+}
+a {
+    text-decoration: none;
+}
+
+button {
+    font-family: "Lato", sans-serif;
+}
+
+/* variáveis */
+:root {
+    /* cores */
+    --cor-background: #090B0F;
+    --cor-principal: #279B7B;
+    --cor-links: #40BE9B;
+    --cor-topico-1: #2D3532;
+    --cor-topico-2: #171A19;
+    --cor-tags: #939393;
+    --cor-tags-secondaria: #717171;
+    --cor-footer: #0D0F0E;
+    --cor-hover: #89e7cd;
+
+    /* tamanhos de fonte */
+    --tamanho-h1: 36px;
+    --tamanho-h2: 24px;
+    --tamanho-h3: 20px;
+    --tamanho-grande: 18px;
+    --tamanho-normal: 16px;
+    --tamanho-medio: 14px;
+    --tamanho-pequeno: 13px;
+    
+
+    /* espessuras de fontes */
+    --fonte-normal: 400;
+    --fonte-media: 500;
+    --fonte-semi-negrita: 600;
+    --fonte-negrita: 700;
+    --fonte-black: 900;
 }

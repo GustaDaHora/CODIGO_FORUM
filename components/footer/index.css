@@ -1,0 +1,41 @@
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  background-color: var(--cor-footer);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+}
+
+.footerLinks {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 5px;
+}
+
+.footerLink {
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  color: var(--cor-principal);
+  font-size: var(--tamanho-medio);
+}
+
+.footerLink:hover {
+  color: var(--cor-hover);
+  transition: .5s ease;
+}
+
+.footerDescricao .direitos {
+  margin: 0;
+  font-size: 12px;
+  color: var(--cor-tags);
+}

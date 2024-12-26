@@ -1,0 +1,15 @@
+.mainTag {
+    display: flex;
+
+    >aside {
+        padding: 1vw;
+        min-width: 30%;
+    }
+
+    >section {
+        padding: 1vw;
+        min-width: 30%;
+    }
+
+    > 
+}
