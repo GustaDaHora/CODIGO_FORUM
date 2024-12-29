@@ -35,7 +35,7 @@ export default async function handler(
 
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
-      select: { id: true, email: true, name: true }, // Adjust fields based on your user model
+      select: { id: true, email: true, name: true, password: true }, // Adjust fields based on your user model
     });
 
     if (!user) {
