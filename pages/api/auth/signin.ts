@@ -7,52 +7,47 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method === "POST") {
-    const { email, password } = req.body;
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
+  }
 
-    if (!email || !password) {
-      res.status(422).json({ message: "Invalid input" });
-      return;
+  const { email, password } = req.body;
+  console.log("Received login request for:", email);
+
+  if (!email || !password) {
+    return res.status(422).json({ message: "Invalid input" });
+  }
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      console.error("User not found:", email);
+      return res.status(422).json({ message: "User not found" });
     }
 
-    try {
-      const user = await prisma.user.findUnique({
-        where: { email },
-      });
-
-      if (!user) {
-        res.status(422).json({ message: "User not found" });
-        return;
-      }
-
-      const passwordValid = await bcrypt.compare(password, user.password);
-      if (!passwordValid) {
-        res.status(401).json({ message: "Invalid password" });
-        return;
-      }
-
-      const jwtSecret = process.env.JWT_SECRET;
-      if (!jwtSecret) {
-        throw new Error("JWT_SECRET is not defined in environment variables");
-      }
-
-      const token = jwt.sign({ userId: user.id }, jwtSecret, {
-        expiresIn: "1m",
-      });
-
-      res.status(200).json({ token });
-    } catch (error) {
-      if (error instanceof Error) {
-        res
-          .status(500)
-          .json({ message: "Internal server error", error: error.message });
-      } else {
-        res
-          .status(500)
-          .json({ message: "Internal server error", error: String(error) });
-      }
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!passwordValid) {
+      console.error("Invalid password for user:", email);
+      return res.status(401).json({ message: "Invalid password" });
     }
-  } else {
-    res.status(405).json({ message: "Method not allowed" });
+
+    if (!process.env.JWT_SECRET) {
+      console.error("Missing JWT_SECRET in environment variables");
+      return res.status(500).json({ message: "Internal server error" });
+    }
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
+    console.log("User logged in:", email);
+    return res.status(200).json({ token });
+  } catch (error) {
+    console.error("Internal server error:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
+

@@ -20,11 +20,12 @@ const SignIn = () => {
         },
         body: JSON.stringify({ email, password }),
       });
+	
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.message || "Login failed");
 
-      if (!response.ok) throw new Error("Login failed");
+      localStorage.setItem("token", result.token);
 
-      const { token } = await response.json();
-      document.cookie = `token=${token}; path=/`;
       router.push("/");
     } catch (error) {
       console.error(error);
