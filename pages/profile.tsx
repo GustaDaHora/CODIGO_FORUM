@@ -57,6 +57,17 @@ const ProfilePage = () => {
     return <div>Failed to load user data.</div>;
   }
 
+  const handleFollow = async () => {
+  await fetch("/api/follow", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ followerId: 1, followingId: user.id }),
+  });
+
+  alert(`Toggled follow for ${user.name}`);
+  };
+
+
   return (
     <div>
       <h1>Profile</h1>

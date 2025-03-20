@@ -8,18 +8,30 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
+model Follow {
+  id       Int   @id @default(autoincrement())
+  follower User  @relation("Follower", fields: [followerId], references: [id])
+  followerId Int
+  following User @relation("Following", fields: [followingId], references: [id])
+  followingId Int
+
+  @@unique([followerId, followingId])
+}
+
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String?
-  email     String    @unique
-  password  String
-  createdAt DateTime  @default(now())
-  posts     Post[]    @relation("author")
+  id       Int      @id @default(autoincrement())
+  name     String?
+  email    String   @unique
+  password String
+  createdAt DateTime @default(now())
+  
+  posts    Post[]   @relation("author")
+  followers Follow[] @relation("Following")
+  following Follow[] @relation("Follower")
 }
 
 model Post {
   id        Int       @id @default(autoincrement())
-  published Boolean   @default(false)
   title     String    @db.VarChar(255)
   content   String?
   author    User?     @relation("author", fields: [authorId], references: [id])
@@ -27,3 +39,4 @@ model Post {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
+
