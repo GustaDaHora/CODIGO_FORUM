@@ -1,0 +1,8 @@
+{
+  "plugins": {
+    "tailwindcss": {},
+    "autoprefixer": {},
+    "postcss-import": {}
+  },
+  "customSyntax": "postcss-scss"
+}
