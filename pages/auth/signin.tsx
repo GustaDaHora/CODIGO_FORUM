@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -22,9 +24,13 @@ const SignIn = () => {
       });
 	
       const result = await response.json();
-      if (!response.ok) throw new Error(result.message || "Login failed");
+      if (!response.ok) {
+        setError(result.message || "Login failed");
+        return;
+      }
 
-      localStorage.setItem("token", result.token);
+      // Store token in cookie instead of localStorage
+      Cookies.set("token", result.token, { expires: 1 }); // expires in 1 day
 
       router.push("/");
     } catch (error) {
