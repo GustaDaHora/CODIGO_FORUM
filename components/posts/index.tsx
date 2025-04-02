@@ -1,119 +1,48 @@
-export const dynamic = "force-dynamic";
-import "./index.css";
+"use client";
+import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import Post from "./[id]";
 
-export default function Post() {
+export const dynamic = "force-dynamic";
+
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  author: { name: string };
+  createdAt: string;
+}
+
+export default function Feed() {
+  const [feed, setFeed] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFeed = async () => {
+      const token = Cookies.get("token");
+      if (!token) return;
+
+      const res = await fetch(`/api/feed?userId=1`);
+      const data = await res.json();
+      setFeed(data);
+      setLoading(false);
+    };
+
+    fetchFeed();
+  }, []);
+
+  if (loading) return <p>Loading feed...</p>;
+
   return (
-    <main>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Cumque
-      reprehenderit alias molestias exercitationem distinctio provident
-      recusandae itaque, nam doloremque ab perferendis quas labore sit
-      reiciendis asperiores excepturi dignissimos quisquam fugiat. Lorem ipsum
-      dolor sit amet consectetur adipisicing elit. Cumque reprehenderit alias
-      molestias exercitationem distinctio provident recusandae itaque, nam
-      doloremque ab perferendis quas labore sit reiciendis asperiores excepturi
-      dignissimos quisquam fugiat. Lorem ipsum dolor sit amet consectetur
-      adipisicing elit. Cumque reprehenderit alias molestias exercitationem
-      distinctio provident recusandae itaque, nam doloremque ab perferendis quas
-      labore sit reiciendis asperiores excepturi dignissimos quisquam fugiat.
-    </main>
+    <div>
+      <h1>Your Feed</h1>
+      {feed.length === 0 ? (
+        <p>No posts from followed users.</p>
+      ) : (
+        feed.map((post) => (
+          <Post key={post.id} {...post} />
+        ))
+      )}
+    </div>
   );
 }
