@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import { compare } from "bcryptjs";
 
 export default async function handler(
   req: NextApiRequest,
@@ -28,7 +28,7 @@ export default async function handler(
       return res.status(422).json({ message: "User not found" });
     }
 
-    const passwordValid = await bcrypt.compare(password, user.password);
+    const passwordValid = await compare(password, user.password);
     if (!passwordValid) {
       console.error("Invalid password for user:", email);
       return res.status(401).json({ message: "Invalid password" });
