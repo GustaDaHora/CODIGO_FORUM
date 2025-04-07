@@ -1,3 +1,4 @@
+"use client";
 export const dynamic = "force-dynamic";
 
 import Post from "@/components/posts";
