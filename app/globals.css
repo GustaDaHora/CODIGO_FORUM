@@ -7,13 +7,11 @@
 @layer base {
   html,
   body {
-    @apply m-0 p-0 w-full min-h-screen text-white bg-[#090B0F] font-['Lato'];
+    @apply m-0 p-0 w-full min-h-screen text-white bg-[#090B0F];
+    font-family: var(--font-lato);
   }
   a {
     @apply no-underline;
-  }
-  button {
-    @apply font-['Lato'];
   }
 }
 
