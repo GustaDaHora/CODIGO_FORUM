@@ -1,19 +1,22 @@
 // app/api/auth/signin/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
 import { compare } from "bcryptjs";
+import { 
+  successResponse, 
+  errorResponse, 
+  unauthorizedResponse, 
+  serverErrorResponse 
+} from "@/lib/api/response";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email, password } = body;
     
     if (!email || !password) {
-      return NextResponse.json(
-        { message: "Invalid input" },
-        { status: 422 }
-      );
+      return errorResponse("Email and password are required", 422);
     }
 
     const user = await prisma.user.findUnique({
@@ -22,27 +25,18 @@ export async function POST(request: Request) {
 
     if (!user) {
       console.error("User not found:", email);
-      return NextResponse.json(
-        { message: "Invalid credentials" },
-        { status: 401 }
-      );
+      return unauthorizedResponse("Invalid credentials");
     }
 
     const passwordValid = await compare(password, user.password);
     if (!passwordValid) {
       console.error("Invalid password for user:", email);
-      return NextResponse.json(
-        { message: "Invalid credentials" },
-        { status: 401 }
-      );
+      return unauthorizedResponse("Invalid credentials");
     }
 
     if (!process.env.JWT_SECRET) {
       console.error("Missing JWT_SECRET in environment variables");
-      return NextResponse.json(
-        { message: "Internal server error" },
-        { status: 500 }
-      );
+      return serverErrorResponse();
     }
 
     const token = jwt.sign(
@@ -51,12 +45,16 @@ export async function POST(request: Request) {
       { expiresIn: "1h" }
     );
 
-    return NextResponse.json({ token });
+    return successResponse({ 
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name
+      }
+    }, "Login successful");
   } catch (error) {
     console.error("Sign-in error:", error);
-    return NextResponse.json(
-      { message: "Failed to sign in" },
-      { status: 500 }
-    );
+    return serverErrorResponse("Failed to sign in");
   }
 }

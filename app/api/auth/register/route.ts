@@ -1,23 +1,22 @@
 // app/api/auth/register/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import { hash } from "bcryptjs";
+import { 
+  successResponse, 
+  errorResponse, 
+  serverErrorResponse 
+} from "@/lib/api/response";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { name, email, password } = body;
 
-    if (
-      !name ||
-      !email ||
-      !email.includes("@") ||
-      !password ||
-      password.length < 5
-    ) {
-      return NextResponse.json(
-        { message: "Invalid input" },
-        { status: 422 }
+    if (!name || !email || !email.includes("@") || !password || password.length < 5) {
+      return errorResponse(
+        "Invalid input. Name, valid email, and password (min 5 characters) are required", 
+        422
       );
     }
 
@@ -26,10 +25,7 @@ export async function POST(request: Request) {
     });
     
     if (existingUser) {
-      return NextResponse.json(
-        { message: "User already exists" },
-        { status: 422 }
-      );
+      return errorResponse("User with this email already exists", 422);
     }
 
     const hashedPassword = await hash(password, 12);
@@ -41,15 +37,13 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(
-      { message: "User created", user: { id: user.id, name: user.name, email: user.email } },
-      { status: 201 }
+    return successResponse(
+      { id: user.id, name: user.name, email: user.email },
+      "User successfully registered", 
+      201
     );
   } catch (error) {
     console.error("Registration error:", error);
-    return NextResponse.json(
-      { message: "Failed to register user" },
-      { status: 500 }
-    );
+    return serverErrorResponse("Failed to register user");
   }
 }

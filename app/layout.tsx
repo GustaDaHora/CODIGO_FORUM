@@ -1,7 +1,10 @@
+// app/layout.tsx
 import "./globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata = {
-  title: "Forum",
+  title: "Papo Olympus Forum",
+  description: "A community discussion platform",
 };
 
 export default function RootLayout({
@@ -11,7 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }
