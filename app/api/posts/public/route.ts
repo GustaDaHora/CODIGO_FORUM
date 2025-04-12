@@ -4,14 +4,24 @@ import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // Get the most recent posts for public viewing
+    // Fetch the most recent public posts
     const publicPosts = await prisma.post.findMany({
-      include: { author: true },
+      where: { 
+        published: true // Assuming you have a 'published' field on posts
+      },
+      include: { 
+        author: {
+          select: {
+            id: true,
+            name: true,
+          }
+        } 
+      },
       orderBy: { createdAt: "desc" },
-      take: 10, // Limit to 10 most recent posts
+      take: 10, // Limit to 10 most recent public posts
     });
 
-    return NextResponse.json(publicPosts, { status: 200 });
+    return NextResponse.json(publicPosts);
   } catch (error) {
     console.error("Error fetching public posts:", error);
     return NextResponse.json(

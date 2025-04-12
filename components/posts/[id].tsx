@@ -1,46 +1,92 @@
 // components/posts/[id].tsx
-import { useState } from 'react';
+"use client";
 
-interface PostProps {
-  id: number;
-  title: string;
-  content: string;
-  author: { name: string };
-  createdAt: string;
-}
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import Link from "next/link";
+import { formatDistanceToNow } from "date-fns";
 
-export default function Post({ id, title, content, author, createdAt }: PostProps) {
-  const [expanded, setExpanded] = useState(false);
+import { Post } from './types';
+
+export default function PostPage() {
+  const params = useParams();
+  const postId = params?.id as string;
+  const [post, setPost] = useState<Post | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await fetch(`/api/posts/${postId}`);
+        
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("Post not found");
+          }
+          throw new Error("Failed to fetch post");
+        }
+        
+        const data = await response.json();
+        setPost(data);
+      } catch (error) {
+        console.error("Error fetching post:", error);
+        setError(error instanceof Error ? error.message : "Failed to load post");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (postId) {
+      fetchPost();
+    }
+  }, [postId]);
+
+  if (loading) return <div className="p-4 text-center">Loading post...</div>;
   
-  // Format date nicely
-  const formattedDate = new Date(createdAt).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
-  
-  // Truncate content if it's too long
-  const isLongContent = content.length > 250;
-  const displayContent = expanded || !isLongContent ? content : `${content.substring(0, 250)}...`;
+  if (error) return (
+    <div className="p-4 text-red-500 text-center">
+      {error}
+      <div className="mt-4">
+        <button 
+          onClick={() => router.push("/")} 
+          className="text-blue-500 hover:underline"
+        >
+          Return to Home
+        </button>
+      </div>
+    </div>
+  );
+
+  if (!post) return <div className="p-4 text-center">Post not found</div>;
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300">
-      <h2 className="text-xl font-bold text-gray-800 mb-2">{title}</h2>
-      <p className="text-gray-700 whitespace-pre-line mb-4">{displayContent}</p>
+    <div className="max-w-3xl mx-auto p-4">
+      <Link href="/" className="text-blue-500 hover:underline mb-4 inline-block">
+        ← Back to Feed
+      </Link>
       
-      {isLongContent && (
-        <button 
-          onClick={() => setExpanded(!expanded)} 
-          className="text-blue-500 hover:underline mb-3 text-sm"
-        >
-          {expanded ? 'Show less' : 'Read more'}
-        </button>
-      )}
-      
-      <div className="flex items-center justify-between text-sm text-gray-500">
-        <span>By <span className="font-medium">{author.name}</span></span>
-        <span>{formattedDate}</span>
-      </div>
+      <article className="bg-white p-6 rounded-lg shadow">
+        <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
+        
+        <div className="flex items-center text-gray-600 mb-6">
+          <span className="mr-2">By {post.author.name}</span>
+          <span>•</span>
+          <span className="ml-2">
+            {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+          </span>
+        </div>
+        
+        <div className="prose max-w-none">
+          {post.content.split('\n').map((paragraph, index) => (
+            <p key={index} className="mb-4">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      </article>
     </div>
   );
 }

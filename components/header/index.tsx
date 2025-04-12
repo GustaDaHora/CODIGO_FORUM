@@ -27,15 +27,15 @@ export default function Header() {
       <div className="w-4/5 flex justify-between items-center">
         <Logo />
         <nav className="flex gap-4 items-center">
-          <Link href="/" className="text-gray-300 hover:text-white transition duration-300">Recentes</Link>
-          <Link href="/" className="text-gray-300 hover:text-white transition duration-300">Relevantes</Link>
-          <Link href="/" className="text-gray-300 hover:text-white transition duration-300">Sem Resposta</Link>
+          <Link href="/" className="text-gray-300 hover:text-white transition duration-300">Recents</Link>
+          <Link href="/" className="text-gray-300 hover:text-white transition duration-300">Relevant</Link>
+          <Link href="/" className="text-gray-300 hover:text-white transition duration-300">No answers</Link>
 
           {!isAuthenticated ? (
             <>
               <Link href="/auth/register">
                 <button className="bg-[var(--cor-principal)] text-white px-4 py-2 rounded-lg font-semibold shadow-md transition duration-400 hover:bg-[var(--cor-links)]">
-                  Cadastro
+                Register
                 </button>
               </Link>
               <Link href="/auth/signin">
@@ -54,7 +54,7 @@ export default function Header() {
               </Link>
               <Link href="/profile">
                 <button className="text-[var(--cor-links)] text-lg transition duration-500 hover:text-[var(--cor-hover)]">
-                  Meu Perfil
+                  My profile
                 </button>
               </Link>
               <button

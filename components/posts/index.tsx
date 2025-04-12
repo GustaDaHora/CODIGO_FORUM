@@ -3,17 +3,16 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import Post from "./[id]";
+import { Post } from "./types";
+import { PostCard } from "./PostCard";
 
-interface Post {
-  id: number;
-  title: string;
-  content: string;
-  author: { name: string };
-  createdAt: string;
+interface FeedProps {
+  showCreateButton?: boolean;
+  onCreateClick?: () => void;
+  publicOnly?: boolean;
 }
 
-export default function Feed() {
+export default function Feed({ showCreateButton = true, onCreateClick, publicOnly = false }: FeedProps) {
   const [feed, setFeed] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -60,42 +59,63 @@ export default function Feed() {
     };
 
     fetchFeed();
-  }, [router]);
+  }, [publicOnly]);
 
-  if (loading) return <div className="p-4 text-center">Loading posts...</div>;
-  
-  if (error) return (
-    <div className="p-4 text-red-500 text-center">
-      {error}
-      {error.includes("Authentication") && (
-        <button 
-          onClick={() => router.push("/auth/signin")} 
-          className="ml-2 text-blue-500 hover:underline"
-        >
-          Login
-        </button>
-      )}
-    </div>
-  );
+  if (loading) {
+    return (
+      <div className="p-4">
+        <div className="animate-pulse space-y-4">
+          {[1, 2, 3].map((n) => (
+            <div key={n} className="h-40 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="p-4">
+        <div className="bg-red-50 text-red-500 p-4 rounded">
+          Error: {error}
+          {error.includes("Authentication") && (
+            <button 
+              onClick={() => router.push("/auth/signin")} 
+              className="ml-2 text-blue-500 hover:underline"
+            >
+              Login
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  const handlePostClick = (postId: string) => {
+    router.push(`/posts/${postId}`);
+  };
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-2xl font-bold mb-4">Recent Posts</h1>
-      {feed.length === 0 ? (
-        <div className="bg-gray-100 p-6 rounded-lg text-center">
-          <p className="text-gray-600">No posts available. Follow some users or create your first post!</p>
-          <button 
-            onClick={() => router.push("/posts/create")} 
-            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+    <div className="p-4">
+      {showCreateButton && (
+        <div className="mb-6">
+          <button
+            onClick={onCreateClick || (() => router.push("/posts/create"))}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
           >
             Create a Post
           </button>
         </div>
+      )}
+      {feed.length === 0 ? (
+        <div className="text-center text-gray-500 py-8">
+          No posts found. Be the first to create one!
+        </div>
       ) : (
-        <div className="divide-y divide-gray-200">
+        <div className="space-y-4">
           {feed.map((post) => (
-            <div key={post.id} className="py-4">
-              <Post {...post} />
+            <div key={post.id}>
+              <PostCard post={post} onPostClick={handlePostClick} />
             </div>
           ))}
         </div>

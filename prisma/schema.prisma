@@ -1,3 +1,4 @@
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,35 +9,36 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model Follow {
-  id       Int   @id @default(autoincrement())
-  follower User  @relation("Follower", fields: [followerId], references: [id])
-  followerId Int
-  following User @relation("Following", fields: [followingId], references: [id])
-  followingId Int
-
-  @@unique([followerId, followingId])
-}
-
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String?
-  email    String   @unique
-  password String
-  createdAt DateTime @default(now())
-  
-  posts    Post[]   @relation("author")
-  followers Follow[] @relation("Following")
-  following Follow[] @relation("Follower")
+  id        String    @id @default(cuid())
+  name      String
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  posts     Post[]
+  followers Follow[]  @relation("Following")
+  following Follow[]  @relation("Follower")
 }
 
 model Post {
-  id        Int       @id @default(autoincrement())
-  title     String    @db.VarChar(255)
-  content   String?
-  author    User?     @relation("author", fields: [authorId], references: [id])
-  authorId  Int?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  String
 }
 
+model Follow {
+  id          String   @id @default(cuid())
+  follower    User     @relation("Follower", fields: [followerId], references: [id])
+  followerId  String
+  following   User     @relation("Following", fields: [followingId], references: [id])
+  followingId String
+  createdAt   DateTime @default(now())
+
+  @@unique([followerId, followingId])
+}
