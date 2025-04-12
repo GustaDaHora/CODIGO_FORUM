@@ -1,4 +1,3 @@
-// pages/profile.tsx
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -19,7 +18,7 @@ const ProfilePage = () => {
     const token = Cookies.get("token");
 
     if (!token) {
-      router.replace("/auth/signin"); // Redirect to login page if no token is found
+      router.replace("/auth/login"); // Redirect to login page if no token is found
       return;
     }
 
@@ -40,7 +39,7 @@ const ProfilePage = () => {
       } catch (error) {
         console.error(error);
         Cookies.remove("token");
-        router.replace("/auth/signin"); // Redirect to login if token validation fails
+        router.replace("/auth/login"); // Redirect to login if token validation fails
       } finally {
         setLoading(false);
       }

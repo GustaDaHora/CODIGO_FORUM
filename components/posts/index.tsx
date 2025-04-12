@@ -80,7 +80,7 @@ export default function Feed({ showCreateButton = true, onCreateClick, publicOnl
           Error: {error}
           {error.includes("Authentication") && (
             <button 
-              onClick={() => router.push("/auth/signin")} 
+              onClick={() => router.push("/auth/login")} 
               className="ml-2 text-blue-500 hover:underline"
             >
               Login

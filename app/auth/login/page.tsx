@@ -1,11 +1,11 @@
-// app/auth/signin/page.tsx
+// app/auth/login/page.tsx
 "use client";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 
-export default function SignIn() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +21,7 @@ export default function SignIn() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/auth/signin", {
+      const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +41,7 @@ export default function SignIn() {
       router.push(redirectPath);
     } catch (error) {
       console.error(error);
-      setError("Failed to sign in. Please check your credentials and try again.");
+      setError("Failed to login. Please check your credentials and try again.");
     } finally {
       setLoading(false);
     }
@@ -49,7 +49,7 @@ export default function SignIn() {
 
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-[#1A202C] rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold text-white mb-6">Sign In</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">Log In</h1>
       
       {error && (
         <div className="bg-red-900/50 border border-red-500 text-red-100 px-4 py-3 rounded mb-4">
@@ -86,7 +86,7 @@ export default function SignIn() {
           className="w-full bg-[var(--cor-principal)] text-white py-2 px-4 rounded-lg 
                    hover:bg-[var(--cor-links)] transition-colors duration-300 disabled:opacity-50"
         >
-          {loading ? "Signing in..." : "Sign In"}
+          {loading ? "Logging in..." : "Log In"}
         </button>
       </form>
       

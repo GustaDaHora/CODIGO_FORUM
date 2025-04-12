@@ -1,4 +1,4 @@
-// app/api/auth/signin/route.ts
+// app/api/auth/login/route.ts
 import { NextRequest } from "next/server";
 import prisma from "@/lib/prisma";
 import jwt from "jsonwebtoken";
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       }
     }, "Login successful");
   } catch (error) {
-    console.error("Sign-in error:", error);
-    return serverErrorResponse("Failed to sign in");
+    console.error("Login error:", error);
+    return serverErrorResponse("Failed to login");
   }
 }

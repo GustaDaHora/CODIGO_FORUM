@@ -16,10 +16,10 @@ export default function Header() {
     setIsAuthenticated(!!token);
   }, []);
 
-  const handleSignout = () => {
+  const handleLogout = () => {
     Cookies.remove("token");
     setIsAuthenticated(false);
-    router.replace("/"); // Redirect to home page or login page after signout
+    router.replace("/"); // Redirect to home page or login page after logout
   };
 
   return (
@@ -38,7 +38,7 @@ export default function Header() {
                 Register
                 </button>
               </Link>
-              <Link href="/auth/signin">
+              <Link href="/auth/login">
                 <button className="flex items-center text-[var(--cor-links)] text-lg transition duration-500 hover:text-[var(--cor-hover)]">
                   <FiLogIn className="mr-2 text-xl font-semibold" />
                   Login
@@ -58,11 +58,11 @@ export default function Header() {
                 </button>
               </Link>
               <button
-                onClick={handleSignout}
+                onClick={handleLogout}
                 className="flex items-center text-[var(--cor-links)] text-lg transition duration-500 hover:text-[var(--cor-hover)]"
               >
                 <FiLogOut className="mr-2 text-xl font-semibold" />
-                Sign Out
+                Log Out
               </button>
             </>
           )}

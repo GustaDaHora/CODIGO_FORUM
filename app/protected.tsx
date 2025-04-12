@@ -26,7 +26,7 @@ function ProtectedPage() {
         if (!res.ok) throw new Error("Token validation failed");
       } catch (error) {
         console.error(error);
-        router.replace("/auth/signin"); // Redirect to login if token validation fails
+        router.replace("/auth/login"); // Redirect to login if token validation fails
       }
     };
 

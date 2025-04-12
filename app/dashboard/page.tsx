@@ -57,9 +57,9 @@ export default function Main() {
             </div>
           ) : (
             <div className="space-y-3">
-              <Link href="/auth/signin">
+              <Link href="/auth/login">
                 <button className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition">
-                  Sign In
+                  Log In
                 </button>
               </Link>
               <Link href="/auth/register">

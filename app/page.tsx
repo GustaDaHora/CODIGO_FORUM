@@ -1,3 +1,4 @@
+"use client";
 import "./globals.css";
 export const dynamic = "force-dynamic";
 import Header from "@/components/header";

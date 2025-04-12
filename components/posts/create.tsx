@@ -28,7 +28,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       const token = Cookies.get("token");
       
       if (!token) {
-        router.push("/auth/signin?redirect=/posts/create");
+        router.push("/auth/login?redirect=/posts/create");
         return;
       }
 
