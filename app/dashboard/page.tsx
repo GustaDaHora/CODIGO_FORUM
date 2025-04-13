@@ -8,7 +8,6 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import CreatePostModal from "@/components/posts/create";
 
-
 export default function Main() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
@@ -17,6 +16,16 @@ export default function Main() {
     const token = Cookies.get("token");
     setIsAuthenticated(!!token);
   }, []);
+
+  // Function to open the modal
+  const openCreatePost = () => {
+    setIsCreatePostOpen(true);
+  };
+
+  // Function to close the modal
+  const closeCreatePost = () => {
+    setIsCreatePostOpen(false);
+  };
 
   return (
     <main className="flex flex-col md:flex-row min-h-screen">
@@ -36,7 +45,7 @@ export default function Main() {
 
       {/* Feed Section (Takes most space) */}
       <div className="flex-1 p-4 md:p-6">
-        <Feed />
+        <Feed onCreateClick={openCreatePost} />
       </div>
 
       {/* Right Sidebar */}
@@ -45,10 +54,12 @@ export default function Main() {
           <h2 className="text-lg font-bold mb-4">Quick Actions</h2>
           {isAuthenticated ? (
             <div className="space-y-3">
-              <CreatePostModal 
-              isOpen={isCreatePostOpen} 
-           onClose={() => setIsCreatePostOpen(false)} 
-/>
+              <button 
+                onClick={openCreatePost}
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition"
+              >
+                Create Post
+              </button>
               <Link href="/profile">
                 <button className="w-full bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition">
                   View Profile
@@ -81,6 +92,12 @@ export default function Main() {
           </div>
         </div>
       </section>
+
+      {/* Add the modal at the bottom of the component */}
+      <CreatePostModal 
+        isOpen={isCreatePostOpen} 
+        onClose={closeCreatePost} 
+      />
     </main>
   );
 }

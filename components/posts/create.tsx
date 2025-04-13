@@ -28,7 +28,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       const token = Cookies.get("token");
       
       if (!token) {
-        router.push("/auth/login?redirect=/posts/create");
+        router.push("/auth/login?redirect=/dashboard");
         return;
       }
 
@@ -51,7 +51,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       }
 
       const post = await response.json();
-      router.push(`/`);
+      router.push(`/dashboard`);
     } catch (error) {
       console.error("Error creating post:", error);
       setError(error instanceof Error ? error.message : "Failed to create post");
@@ -103,7 +103,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
             onChange={(e) => setContent(e.target.value)}
             required
             rows={8}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            className="dark:bg-gray-800 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         
