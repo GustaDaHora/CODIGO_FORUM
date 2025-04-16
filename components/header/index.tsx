@@ -33,7 +33,7 @@ export default function Header() {
   };
 
   return (
-    <>
+    <div>
       <header className="relative top-0 left-0 flex justify-center items-center w-full h-[75px] bg-gradient-to-b from-black to-[#2D3532]">
         <div className="w-4/5 flex justify-between items-center">
           <Logo />
@@ -84,6 +84,6 @@ export default function Header() {
       
       {/* Add the modal at the bottom of the component */}
       <CreatePostModal isOpen={isCreatePostOpen} onClose={closeCreatePost} />
-    </>
+    </div>
   );
 }
