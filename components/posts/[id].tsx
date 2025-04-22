@@ -68,11 +68,11 @@ export default function PostPage() {
         ← Back to Feed
       </Link>
       
-      <article className="bg-white p-6 rounded-lg shadow">
+      <article className="bg-[#40BE9B] p-6 rounded-lg shadow">
         <h1 className="text-3xl font-bold mb-2">{post.title}</h1>
         
-        <div className="flex items-center text-gray-600 mb-6">
-          <span className="mr-2">By {post.author.name}</span>
+        <div className="flex items-center text-gray-900 mb-6">
+          <span className="mr-2 text-[#40BE9B]">By {post.author.name}</span>
           <span>•</span>
           <span className="ml-2">
             {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}

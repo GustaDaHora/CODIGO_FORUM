@@ -97,7 +97,7 @@ export default function Feed({
       <div className="p-4">
         <div className="animate-pulse space-y-4">
           {[1, 2, 3].map((n) => (
-            <div key={n} className="h-40 bg-gray-200 rounded"></div>
+            <div key={n} className="h-40 bg-gray-400 rounded"></div>
           ))}
         </div>
       </div>
