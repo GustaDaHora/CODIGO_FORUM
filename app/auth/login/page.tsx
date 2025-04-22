@@ -92,7 +92,7 @@ export default function Login() {
       
       <div className="mt-4 text-center text-white">
         <p>
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link href="/auth/register" className="text-[var(--cor-links)] hover:text-[var(--cor-hover)]">
             Register
           </Link>
