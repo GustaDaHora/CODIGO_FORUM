@@ -22,59 +22,89 @@ export default function Feed({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [viewMode, setViewMode] = useState<'public' | 'personal'>('public');
   const router = useRouter();
 
   useEffect(() => {
-    const fetchFeed = async () => {
-      try {
-        const token = Cookies.get("token");
+    // Check if user is authenticated
+    const token = Cookies.get("token");
+    setIsAuthenticated(!!token);
+    
+    // If publicOnly is true, force public mode
+    if (publicOnly) {
+      setViewMode('public');
+    }
+    
+    fetchPosts();
+  }, [publicOnly, viewMode]);
 
-        if (!token) {
-          // Show some public posts instead of requiring login
-          const res = await fetch(`/api/posts/public`);
-          if (!res.ok) throw new Error("Failed to fetch public posts");
-          const data = await res.json();
-          setFeed(data);
-          return;
-        }
-
-        // Fetch feed for authenticated user
-        const res = await fetch(`/api/posts/feed`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) {
-          if (res.status === 401) {
-            // Token invalid or expired
-            Cookies.remove("token");
-            throw new Error("Authentication expired. Please login again.");
-          }
-          throw new Error("Failed to fetch posts");
-        }
-
-        const data = await res.json();
-        // Check the structure of data and extract the posts array
-        if (data.data && Array.isArray(data.data)) {
-          setFeed(data.data); // Assuming the posts are in a 'data' property
-        } else {
-          // Handle unexpected response format
-          console.error("Unexpected API response format:", data);
-          setError("Received invalid data format from server");
-        }
-      } catch (error) {
-        console.error("Error fetching feed:", error);
-        setError(
-          error instanceof Error ? error.message : "Failed to load posts"
-        );
-      } finally {
-        setLoading(false);
+  const fetchPosts = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      if (viewMode === 'personal' && isAuthenticated) {
+        await fetchPersonalFeed();
+      } else {
+        await fetchPublicPosts();
       }
-    };
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      setError(error instanceof Error ? error.message : "Failed to load posts");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchFeed();
-  }, [publicOnly]);
+  const fetchPublicPosts = async () => {
+    const res = await fetch(`/api/posts/public`);
+    
+    if (!res.ok) {
+      throw new Error("Failed to fetch public posts");
+    }
+    
+    const data = await res.json();
+    setFeed(data);
+  };
+
+  const fetchPersonalFeed = async () => {
+    const token = Cookies.get("token");
+    
+    if (!token) {
+      throw new Error("No authentication token found");
+    }
+    
+    const res = await fetch(`/api/posts/feed`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      if (res.status === 401) {
+        // Token invalid or expired
+        Cookies.remove("token");
+        throw new Error("Authentication expired. Please login again.");
+      }
+      throw new Error("Failed to fetch personalized feed");
+    }
+
+    const data = await res.json();
+    
+    // Check the structure of data and extract the posts array
+    if (data.data && Array.isArray(data.data)) {
+      setFeed(data.data);
+    } else {
+      console.error("Unexpected API response format:", data);
+      throw new Error("Received invalid data format from server");
+    }
+  };
+
+  // Toggle between personal and public feed
+  const toggleFeedType = () => {
+    setViewMode(viewMode === 'public' ? 'personal' : 'public');
+  };
 
   // Function to handle the create post button click
   const handleCreateClick = () => {
@@ -128,16 +158,41 @@ export default function Feed({
 
   return (
     <div className="p-4">
-      {showCreateButton && (
-        <div className="mb-6">
-          <button 
-            onClick={handleCreateClick} 
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Create a Post
-          </button>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">
+          {viewMode === 'personal' ? 'Your Feed' : 'Community Posts'}
+        </h1>
+        
+        <div className="flex gap-2">
+          {isAuthenticated && !publicOnly && (
+            <button
+              onClick={toggleFeedType}
+              className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded"
+            >
+              {viewMode === 'personal' ? 'View All Posts' : 'View Your Feed'}
+            </button>
+          )}
+          
+          {showCreateButton && isAuthenticated && (
+            <button 
+              onClick={handleCreateClick} 
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Create a Post
+            </button>
+          )}
+          
+          {!isAuthenticated && showCreateButton && (
+            <button 
+              onClick={() => router.push('/auth/login')}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Log In to Create Post
+            </button>
+          )}
         </div>
-      )}
+      </div>
+      
       {feed.length === 0 ? (
         <div className="text-center text-gray-500 py-8">
           No posts found. Be the first to create one!

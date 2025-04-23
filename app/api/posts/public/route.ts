@@ -4,10 +4,10 @@ import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // Fetch the most recent public posts
+    // Fetch the most recent public posts with more posts (e.g., 20 instead of 10)
     const publicPosts = await prisma.post.findMany({
       where: { 
-        published: true // Assuming you have a 'published' field on posts
+        published: true
       },
       include: { 
         author: {
@@ -18,7 +18,7 @@ export async function GET() {
         } 
       },
       orderBy: { createdAt: "desc" },
-      take: 10, // Limit to 10 most recent public posts
+      take: 20, // Increase the number of posts returned
     });
 
     return NextResponse.json(publicPosts);
