@@ -36,13 +36,20 @@ export default function Feed({
       setViewMode('public');
     }
     
+    // Initial fetch
     fetchPosts();
+
+    // Set up periodic refresh every 10 seconds
+    const refreshInterval = setInterval(fetchPosts, 10000);
+
+    // Cleanup interval on unmount
+    return () => {
+      clearInterval(refreshInterval);
+    };
   }, [publicOnly, viewMode]);
 
   const fetchPosts = async () => {
     setLoading(true);
-    setError(null);
-    
     try {
       if (viewMode === 'personal' && isAuthenticated) {
         await fetchPersonalFeed();
@@ -58,7 +65,14 @@ export default function Feed({
   };
 
   const fetchPublicPosts = async () => {
-    const res = await fetch(`/api/posts/public`);
+    const timestamp = Date.now(); // Add cache-busting timestamp
+    const res = await fetch(`/api/posts/public?t=${timestamp}`, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
+    });
     
     if (!res.ok) {
       throw new Error("Failed to fetch public posts");
@@ -75,9 +89,13 @@ export default function Feed({
       throw new Error("No authentication token found");
     }
     
-    const res = await fetch(`/api/posts/feed`, {
+    const timestamp = Date.now(); // Add cache-busting timestamp
+    const res = await fetch(`/api/posts/feed?t=${timestamp}`, {
+      cache: 'no-store',
       headers: {
-        Authorization: `Bearer ${token}`,
+        'Authorization': `Bearer ${token}`,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
       },
     });
 
