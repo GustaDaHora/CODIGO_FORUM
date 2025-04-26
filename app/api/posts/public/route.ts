@@ -4,7 +4,6 @@ import prisma from "@/lib/prisma";
 
 export async function GET() {
   try {
-    // Fetch the most recent public posts with more posts (e.g., 20 instead of 10)
     const publicPosts = await prisma.post.findMany({
       where: { 
         published: true
@@ -18,10 +17,16 @@ export async function GET() {
         } 
       },
       orderBy: { createdAt: "desc" },
-      take: 20, // Increase the number of posts returned
+      take: 20,
     });
 
-    return NextResponse.json(publicPosts);
+    // Add headers to prevent caching
+    const headers = {
+      'Cache-Control': 'no-store, must-revalidate',
+      'Pragma': 'no-cache',
+    };
+
+    return NextResponse.json(publicPosts, { headers });
   } catch (error) {
     console.error("Error fetching public posts:", error);
     return NextResponse.json(

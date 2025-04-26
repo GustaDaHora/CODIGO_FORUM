@@ -19,7 +19,6 @@ export async function POST(request: NextRequest) {
         return errorResponse("Title and content are required", 400);
       }
 
-      // Create the post
       const post = await prisma.post.create({
         data: {
           title,
@@ -48,11 +47,13 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const userId = searchParams.get('userId');
+
   try {
-    // Public route to get published posts
     const posts = await prisma.post.findMany({
       where: {
-        published: true,
+        ...(userId ? { authorId: userId } : { published: true }),
       },
       include: {
         author: {

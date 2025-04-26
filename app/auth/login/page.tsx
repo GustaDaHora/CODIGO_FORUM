@@ -64,7 +64,7 @@ export default function Login() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 rounded"
+            className="w-full px-3 py-2 rounded border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-[--cor-principal]"
             required
           />
         </div>
@@ -75,7 +75,7 @@ export default function Login() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-3 py-2 rounded"
+            className="w-full px-3 py-2 rounded border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-[--cor-principal]"
             required
           />
         </div>
@@ -83,7 +83,7 @@ export default function Login() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-[var(--cor-principal)] text-white py-2 px-4 rounded-lg 
+          className="w-full bg-[var(--cor-principal)] text-[--cor-tags] text-xl font-bold py-2 px-4 rounded-lg 
                    hover:bg-[var(--cor-links)] transition-colors duration-300 disabled:opacity-50"
         >
           {loading ? "Logging in..." : "Log In"}
