@@ -28,7 +28,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       const token = Cookies.get("token");
       
       if (!token) {
-        router.push("/auth/login?redirect=/dashboard");
+        router.push("/auth/login?redirect=/");
         return;
       }
 
@@ -51,7 +51,7 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
       }
 
       const post = await response.json();
-      router.push(`/dashboard`);
+      router.push(`/`);
     } catch (error) {
       console.error("Error creating post:", error);
       setError(error instanceof Error ? error.message : "Failed to create post");
