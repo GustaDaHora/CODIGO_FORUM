@@ -155,7 +155,7 @@ export default function PostPage() {
         {/* Left Sidebar - Post Navigation and Info */}
         <aside className="p-4 md:w-1/4 bg-[#10141b]">
           <div className="sticky top-20">
-            <Link href="/" className="text-blue-500 hover:underline mb-6 block">
+            <Link href="/" className="font-bold bg-inherit text-blue-500 hover:underline mb-6 block">
               ← Back to Feed
             </Link>
 
