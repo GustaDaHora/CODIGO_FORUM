@@ -299,5 +299,5 @@ export default function PostPage() {
       </div>
       <Footer />
     </>
-  );
+    );
 }

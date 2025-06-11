@@ -2,6 +2,8 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
   try {
     const publicPosts = await prisma.post.findMany({
@@ -24,6 +26,7 @@ export async function GET() {
     const headers = {
       'Cache-Control': 'no-store, must-revalidate',
       'Pragma': 'no-cache',
+      'Expires': '0',
     };
 
     return NextResponse.json(publicPosts, { headers });

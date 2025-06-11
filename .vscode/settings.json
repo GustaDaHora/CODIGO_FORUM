@@ -9,5 +9,7 @@
   "tailwindCSS.includeLanguages": {
       "plaintext": "html"
   },
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+  "WillLuke.nextjs.addTypesOnSave": true,
+  "WillLuke.nextjs.hasPrompted": true
 }

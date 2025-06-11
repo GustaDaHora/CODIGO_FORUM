@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { withAuth } from "@/lib/middleware/auth";
 import { successResponse, serverErrorResponse } from "@/lib/api/response";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   return withAuth(request, async (req) => {
     try {
@@ -38,7 +40,11 @@ export async function GET(request: NextRequest) {
         take: 20, // Limit to 20 most recent posts
       });
 
-      return successResponse(feedPosts);
+      const response = successResponse(feedPosts);
+      response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+      response.headers.set("Pragma", "no-cache");
+      response.headers.set("Expires", "0");
+      return response;
     } catch (error) {
       console.error("Error fetching feed:", error);
       return serverErrorResponse("Failed to fetch feed posts");
