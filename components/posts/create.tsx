@@ -9,9 +9,10 @@ import { Dialog } from "@headlessui/react";
 interface CreatePostModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onPostCreated?: () => void;
 }
 
-export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProps) {
+export default function CreatePostModal({ isOpen, onClose, onPostCreated }: CreatePostModalProps) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isPublic, setIsPublic] = useState(true);
@@ -50,8 +51,11 @@ export default function CreatePostModal({ isOpen, onClose }: CreatePostModalProp
         throw new Error(data.message || "Failed to create post");
       }
 
-      const post = await response.json();
-      router.push(`/`);
+      if (onPostCreated) onPostCreated();
+      onClose();
+      setTitle("");
+      setContent("");
+      setIsPublic(true);
     } catch (error) {
       console.error("Error creating post:", error);
       setError(error instanceof Error ? error.message : "Failed to create post");

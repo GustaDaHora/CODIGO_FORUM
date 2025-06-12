@@ -1,6 +1,6 @@
 // components/posts/index.tsx
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { Post } from "./types";
@@ -25,44 +25,6 @@ export default function Feed({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [viewMode, setViewMode] = useState<'public' | 'personal'>('public');
   const router = useRouter();
-
-  useEffect(() => {
-    // Check if user is authenticated
-    const token = Cookies.get("token");
-    setIsAuthenticated(!!token);
-    
-    // If publicOnly is true, force public mode
-    if (publicOnly) {
-      setViewMode('public');
-    }
-    
-    // Initial fetch
-    fetchPosts();
-
-    // Set up periodic refresh every 10 seconds
-    const refreshInterval = setInterval(fetchPosts, 10000);
-
-    // Cleanup interval on unmount
-    return () => {
-      clearInterval(refreshInterval);
-    };
-  }, [publicOnly, viewMode]);
-
-  const fetchPosts = async () => {
-    setLoading(true);
-    try {
-      if (viewMode === 'personal' && isAuthenticated) {
-        await fetchPersonalFeed();
-      } else {
-        await fetchPublicPosts();
-      }
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-      setError(error instanceof Error ? error.message : "Failed to load posts");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const fetchPublicPosts = async () => {
     const timestamp = Date.now(); // Add cache-busting timestamp
@@ -140,17 +102,32 @@ export default function Feed({
     setIsCreatePostOpen(false);
   };
 
-  if (loading) {
-    return (
-      <div className="p-4">
-        <div className="animate-pulse space-y-4">
-          {[1, 2, 3].map((n) => (
-            <div key={n} className="h-40 bg-gray-400 rounded"></div>
-          ))}
-        </div>
-      </div>
-    );
-  }
+  // Function to refresh posts (exposed for modal)
+  const refreshFeed = useCallback(async () => {
+    setLoading(true);
+    try {
+      if (viewMode === 'personal' && isAuthenticated) {
+        await fetchPersonalFeed();
+      } else {
+        await fetchPublicPosts();
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      setError(error instanceof Error ? error.message : "Failed to load posts");
+    } finally {
+      setLoading(false);
+    }
+  }, [viewMode, isAuthenticated, publicOnly]);
+
+  useEffect(() => {
+    refreshFeed(); // initial load
+
+    const interval = setInterval(() => {
+      refreshFeed(); // updated state is captured properly here
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [refreshFeed]);
 
   if (error) {
     return (
@@ -230,6 +207,7 @@ export default function Feed({
         <CreatePostModal 
           isOpen={isCreatePostOpen} 
           onClose={closeCreatePost} 
+          onPostCreated={refreshFeed}
         />
       )}
     </div>
