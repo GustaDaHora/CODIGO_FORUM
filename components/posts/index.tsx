@@ -1,5 +1,4 @@
 // components/posts/index.tsx
-"use client";
 import { useEffect, useState, useCallback } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -10,7 +9,7 @@ import CreatePostModal from "./create";
 interface FeedProps {
   showCreateButton?: boolean;
   onCreateClick?: () => void;
-  publicOnly?: boolean;
+  publicOnly?: boolean; 
 }
 
 export default function Feed({
